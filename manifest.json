@@ -1,7 +1,7 @@
 {
     "name": "Footballers",
     "short_name": "Footballers",
-    "description": "Footballers, you can watch all matches up to date",
+    "description": "Don't miss your favorite team match",
     "start_url": "/index.html",
     "display": "standalone",
     "background_color": "#d32f2f",
@@ -13,10 +13,6 @@
     }, {
         "src": "./assets/img/favicon-32x32.png",
         "sizes": "32x32",
-        "type": "image/png"
-    }, {
-        "src": "./assets/img/favicon-16x16.png",
-        "sizes": "16x16",
         "type": "image/png"
     }, {
         "src": "./assets/img/apple-touch-icon.png",

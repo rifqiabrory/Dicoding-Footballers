@@ -40,6 +40,11 @@
     z-index: 0 !important;
 }
 
+#content {
+    margin-top: 80px;
+    padding: 0 15px !important;
+}
+
 .card .card-image:hover {
     cursor: pointer;
 }
@@ -48,8 +53,12 @@
     height: 40px;
     margin-top: 13px;
     margin-left: -15px;
+    padding-left: 15px !important;
 }
 
+.p-12 {
+    padding: 0 12px !important;
+}
 .link {
     color: #fff;
     font-weight: bold;
