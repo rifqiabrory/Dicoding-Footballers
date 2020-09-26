@@ -16,11 +16,16 @@ var urlsToCache = [
   "/assets/img/logo.jpg",
   "/assets/img/logo-white.png",
   "/pages/home.html",
-  "/pages/trends.html",
+  "/pages/match.html",
   "/pages/saved.html",
   "/pages/about.html",
+  "/detail-team.html",
   "/assets/js/materialize.min.js",
-  "/assets/js/initialize.js",
+  "/assets/js/navigation.js",
+  "/push.js",
+  "/assets/js/api.js",
+  "/assets/js/db.js",
+  "/assets/js/lib/idb.js",
 ];
 
 self.addEventListener("install", function (event) {
@@ -32,16 +37,25 @@ self.addEventListener("install", function (event) {
 });
 
 self.addEventListener("fetch", function (event) {
-  event.respondWith(
-    caches
-      .match(event.request, { cacheName: CACHE_NAME })
-      .then(function (response) {
-        if (response) {
+  var base_url = "https://api.football-data.org/v2/";
+  if (event.request.url.indexOf(base_url) > -1) {
+    event.respondWith(
+      caches.open(CACHE_NAME).then(function (cache) {
+        return fetch(event.request).then(function (response) {
+          cache.put(event.request.url, response.clone());
           return response;
-        }
-        return fetch(event.request);
+        });
       })
-  );
+    );
+  } else {
+    event.respondWith(
+      caches
+        .match(event.request, { ignoreSearch: true })
+        .then(function (response) {
+          return response || fetch(event.request);
+        })
+    );
+  }
 });
 
 self.addEventListener("activate", function (event) {
@@ -56,5 +70,28 @@ self.addEventListener("activate", function (event) {
         })
       );
     })
+  );
+});
+
+self.addEventListener("push", function (event) {
+  var body;
+  if (event.data) {
+    body = event.data.text();
+  } else {
+    body = "Push message no payload";
+  }
+
+  var options = {
+    body: body,
+    icon: "./assets/img/android-chrome-512x512.png",
+    vibration: [100, 50, 100],
+    data: {
+      dataOfArrival: Date.now(),
+      primaryKey: 1,
+    },
+  };
+
+  event.waitUntil(
+    self.registration.showNotification("Push Notification", options)
   );
 });

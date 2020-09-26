@@ -29,10 +29,10 @@ document.addEventListener("DOMContentLoaded", function () {
     xhttp.send();
   }
 
+  // load page content
   var page = window.location.hash.substr(1);
   if (page === "") page = "home";
   loadPage(page);
-  loadData();
 
   function loadPage(page) {
     var xhttp = new XMLHttpRequest();
@@ -41,6 +41,11 @@ document.addEventListener("DOMContentLoaded", function () {
         var content = document.querySelector("#content");
         if (this.status == 200) {
           content.innerHTML = xhttp.responseText;
+          if (page == "home") {
+            getStandingsCompetitions("2014");
+          } else if (page == "match") {
+            getMatchesCompetitions("2014", 1);
+          }
         } else if (this.status == 404) {
           content.innerHTML = "<p>Halaman tidak ditemukan.</p>";
         } else {
@@ -50,21 +55,5 @@ document.addEventListener("DOMContentLoaded", function () {
     };
     xhttp.open("GET", "pages/" + page + ".html", true);
     xhttp.send();
-  }
-
-  function loadData(){
-    const key = "f2a05993ef6d48c7b7ab3015c127a59f";
-    const Standings = "https://api.football-data.org/v2/competitions/2001/standings";
-    const InformasiTeam = "https://api.football-data.org/v2/teams/86";//{id_tim}
-    const JadwalTandingTeam = "https://api.football-data.org/v2/teams/86/matches?status=SCHEDULED";//{id_tim}
-
-    fetch(JadwalTandingTeam, {
-      method: 'GET',
-      headers: {
-        'X-Auth-Token': key
-      }
-    })
-    .then(responJson => responJson.json())
-    .then(result => console.log(result)).catch(err => console.log(err));
   }
 });

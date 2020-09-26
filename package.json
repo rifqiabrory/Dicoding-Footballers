@@ -1,0 +1,22 @@
+{
+  "name": "footballers",
+  "version": "1.0.0",
+  "description": "Aplikasi Submission 2 Dicoding Football PWA",
+  "main": "register-sw.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rifqiabrory/Dicoding-Footballers.git"
+  },
+  "author": "Rifqi Abrory",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rifqiabrory/Dicoding-Footballers/issues"
+  },
+  "homepage": "https://github.com/rifqiabrory/Dicoding-Footballers#readme",
+  "dependencies": {
+    "web-push": "^3.4.4"
+  }
+}
