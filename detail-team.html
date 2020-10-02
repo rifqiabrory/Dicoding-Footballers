@@ -18,7 +18,7 @@
 
 <body>
     <!-- navigation -->
-    <nav class="red darken-2 my-nav" role="navigation">
+    <nav class="red darken-2" role="navigation">
         <div class="nav-wrapper container">
             <a id="logo-container" href="#home" class="brand-logo p-12">
                 <img class="logo-img" src="./assets/img/logo.jpg" alt="logo white" />
@@ -33,6 +33,10 @@
     <div class="container">
         <div class="section">
             <div class="row">
+                <div>
+                    <a id="addFavorite" style="display: none" class="waves-effect waves-light btn light-blue lighten-1"> Add to Favorite </a>
+                    <a id="removeFavorite" style="display: none" class="waves-effect waves-light btn red darken-4"> Remove from Favorite </a>
+                </div>
                 <div id="content"></div>
             </div>
         </div>
@@ -74,13 +78,41 @@
     <script type="text/javascript" src="./register-sw.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", async function () {
-            const DetailTeam = getDetailTeam();
+            let detailTeam = getDetailTeam();
+            const addFavorite = document.getElementById('addFavorite');
+            const removeFavorite = document.getElementById('removeFavorite');
 
-            const addFavorite = document.getElementById('addFavorite')
-            const removeFavorite = document.getElementById('removeFavorite')
+            const urlParams = new URLSearchParams(window.location.search);
+            const idParam = urlParams.get("id");
+            const allTeam = await dbGetAllFavoriteTeam()
+            const isTeamAdded = allTeam.find(team => team.id === parseInt(idParam))
 
+            if (isTeamAdded) removeFavorite.style.display = 'inline-block'
+            else addFavorite.style.display = 'inline-block'
 
-            console.log(addFavorite)
+            addFavorite.onclick = function() {
+                detailTeam.then((team) => {
+                    dbInsertFavoriteTeam(team)
+                    .then(() => {
+                        alert("Favorite team successfully saved.");
+                        addFavorite.style.display = "none"
+                        removeFavorite.style.display = 'inline-block'
+                    })
+                    .catch(() => alert("Failed save favorite team."))
+                })
+            }
+
+            removeFavorite.onclick = function() {
+                detailTeam.then((team) => {
+                    dbDeleteFavoriteTeam(team.id)
+                    .then(() => {
+                        alert("Favorite team successfully deleted.");
+                        addFavorite.style.display = "none"
+                        removeFavorite.style.display = 'inline-block'
+                    })
+                    .catch(() => alert("Failed delete favorite team."))
+                })
+            }
         })
     </script>
 </body>

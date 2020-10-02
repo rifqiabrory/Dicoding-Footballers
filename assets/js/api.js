@@ -182,9 +182,6 @@ function teamProfile(data) {
 
   let teamProfile = `
   <div class="card teamProfile">
-    <a id="addFavorite" class="waves-effect waves-light btn light-blue lighten-1">
-      Add to Favorite
-    </a>
     <div class="row">
         <div class="col s12 m12" style="padding-bottom: 20px; border-bottom: 2px solid #ccc; text-align: center;">
           <figure class="teamProfileImg">
@@ -252,4 +249,35 @@ function teamProfile(data) {
     </div>
   </div>`;
   document.getElementById("content").innerHTML = teamProfile;
+}
+
+function getFavoriteTeam() {
+  dbGetAllFavoriteTeam().then(function(teams) {
+    let favoriteTeam = "";
+    teams.map(team => {
+      favoriteTeam += `
+          <div class="col s12 m6">
+            <div class="card">
+              <a href="./detail-team.html?id=${team.id}">
+                <div class="card-image waves-effect waves-block waves-light">
+                  <img
+                    src="${team.crestUrl}"
+                    style="max-height: 150px; margin: 20px auto"
+                  />
+                </div>
+              </a>
+              <div class="card-content">
+                <span class="card-title truncate">${team.name}</span>
+                <ul>
+                  <li class="collection-item">${team.website}</li>
+                  <li class="collection-item">${team.phone}</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          `;
+    });
+    if (favoriteTeam.length < 1) favoriteTeam = '<h6 style="padding-left: 15px">No team added to favorite</h6>'
+    document.getElementById("favorite").innerHTML = favoriteTeam;
+  });
 }

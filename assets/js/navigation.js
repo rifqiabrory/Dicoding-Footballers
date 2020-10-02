@@ -31,8 +31,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // load page content
   var page = window.location.hash.substr(1);
-  if (page === "") page = "home";
-  loadPage(page);
+  var search = window.location.search;
+  if(!search) {
+    if (page === "") page = "home";
+    loadPage(page);
+  }
 
   function loadPage(page) {
     var xhttp = new XMLHttpRequest();
@@ -45,6 +48,8 @@ document.addEventListener("DOMContentLoaded", function () {
             getStandingsCompetitions("2014");
           } else if (page == "match") {
             getMatchesCompetitions("2014", 1);
+          } else if(page == "favorite") {
+            getFavoriteTeam()
           }
         } else if (this.status == 404) {
           content.innerHTML = "<p>Halaman tidak ditemukan.</p>";

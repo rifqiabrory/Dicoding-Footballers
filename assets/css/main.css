@@ -8,12 +8,6 @@
     padding: 8px 10px 8px;
 }
 
-.my-nav {
-    position: fixed;
-    z-index: 99;
-    overflow: hidden;
-}
-
 #nav-mobile {
     background-color: #d32f2f;
 }
@@ -42,11 +36,6 @@
 
 .sidenav-overlay {
     z-index: 0 !important;
-}
-
-#content {
-    margin-top: 80px;
-    padding: 0 15px !important;
 }
 
 .inline-item {
