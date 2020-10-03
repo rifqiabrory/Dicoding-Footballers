@@ -77,24 +77,22 @@ function matchesTable(data) {
   data.matches.map((team) => {
     matches += `
     <div class="col s12 m6">
-      <a href="./teamDetail.html?id=${team.id}">
-        <div class="card">
-          <div class="ribbon"><span>${team.status}</span></div>
-          <div class="card-content black-text">
-              <div class="team-wrapper">
-                <div class="vs-team">
-                  <p><strong>${team.awayTeam.name}</strong></p>
-                  <p><strong>${team.homeTeam.name}</strong></p>
-                </div>
-                <div class="time-team">
-                  <span class="card-title"><strong>FT</strong></span>
-                  <p>${moment(team.utcDate).format("MMM Do YY")}</p>
-                  <p>${moment(team.utcDate).format("h:mm a")}</p>
-                </div>
+      <div class="card">
+        <div class="ribbon"><span>${team.status}</span></div>
+        <div class="card-content black-text">
+            <div class="team-wrapper">
+              <div class="vs-team">
+                <p><strong>${team.awayTeam.name}</strong></p>
+                <p><strong>${team.homeTeam.name}</strong></p>
               </div>
-          </div>
+              <div class="time-team">
+                <span class="card-title"><strong>FT</strong></span>
+                <p>${moment(team.utcDate).format("MMM Do YY")}</p>
+                <p>${moment(team.utcDate).format("h:mm a")}</p>
+              </div>
+            </div>
         </div>
-      </a>
+      </div>
     </div>
     `;
   });
