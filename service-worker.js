@@ -29,6 +29,7 @@ workbox.precaching.precacheAndRoute(
     { url: "/assets/js/materialize.min.js", revision: '1' },
     { url: "/assets/js/lib/moment.js", revision: '1' },
     { url: "/assets/js/navigation.js", revision: '1' },
+    { url: "/register-sw.js", revision: '1' },
     { url: "/push.js", revision: '1' },
     { url: "/assets/js/api.js", revision: '1' },
     { url: "/assets/js/db.js", revision: '1' },
