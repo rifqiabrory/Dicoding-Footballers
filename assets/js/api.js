@@ -110,9 +110,7 @@ function standingsTable(data) {
           <figure class="standingsTeamLogo">
               <img src="${team.team.crestUrl}" alt="${team.team.name}">
           </figure>
-          <a href="./detail-team.html?id=${
-            team.team.id
-          }"  class="blue-grey-text text-darken-2">${team.team.name}</a>
+          <h6 class="blue-grey-text text-darken-2">${team.team.name}</h6>
         </td>
         <td>${team.playedGames}</td>
         <td>${team.won}</td>
@@ -256,19 +254,18 @@ function getFavoriteTeam() {
       favoriteTeam += `
           <div class="col s12 m6">
             <div class="card">
-              <a href="./detail-team.html?id=${team.id}">
-                <div class="card-image waves-effect waves-block waves-light">
-                  <img
-                    src="${team.crestUrl}"
-                    style="max-height: 150px; margin: 20px auto"
-                  />
-                </div>
-              </a>
+              <button onclick="dbDeleteFavoriteTeam(${team.id},'${team.name}')" class="waves-effect waves-light btn red accent-3">HAPUS</button>
+              <div class="card-image waves-effect waves-block waves-light">
+                <img
+                  src="${team.logo}"
+                  style="max-height: 150px; margin: 20px auto"
+                />
+              </div>
               <div class="card-content">
                 <span class="card-title truncate">${team.name}</span>
                 <ul>
+                  <li class="collection-item">${team.venue}</li>
                   <li class="collection-item">${team.website}</li>
-                  <li class="collection-item">${team.phone}</li>
                 </ul>
               </div>
             </div>
@@ -278,4 +275,74 @@ function getFavoriteTeam() {
     if (favoriteTeam.length < 1) favoriteTeam = '<h6 style="padding-left: 15px">No team added to favorite</h6>'
     document.getElementById("favorite").innerHTML = favoriteTeam;
   });
+}
+
+function getTeams(leagueID) {
+  if('caches' in window){
+      caches.match(`${BASE_URL}/competitions/${leagueID}/teams`)
+      .then(res => {
+          if(res){
+              res.json()
+              .then(data => {
+                  let teamsHTML = ''
+                  data = data.teams
+                  data.forEach(team => {
+                      let urlTeamImage = team.crestUrl
+                      urlTeamImage = urlTeamImage.replace(/^http:\/\//i, 'https://')
+                      teamsHTML  += `
+                      <div class="col s12 m6">
+                        <div class="card">
+                          <button onclick="dbInsertFavoriteTeam(${team.id},'${urlTeamImage}','${team.name}','${team.venue}','${team.website}')" class="website-action white-text btn blue accent-3">Add Favorite</button>
+                          <div class="card-image waves-effect waves-block waves-light">
+                            <img src="${urlTeamImage}" height="150px" alt="${team.name}"/>
+                          </div>
+                          <div class="card-content">
+                            <span class="card-title truncate">${team.name}</span>
+                            <ul>
+                              <li class="collection-item">${team.venue}</li>
+                              <li class="collection-item"><a href="${team.website}" target="_blank">${team.website}</a></li>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>`
+                  })
+                  document.getElementById('teams').innerHTML = teamsHTML
+              })
+          }
+      })
+
+  }
+  fetch(`${BASE_URL}/competitions/${leagueID}/teams`,{
+      headers : {
+          'X-Auth-Token' : API_KEY
+      }
+  })
+  .then(status)
+  .then(res => res.json())
+  .then(data => {
+      let teamsHTML = ''
+      data = data.teams
+      data.forEach(team => {
+          let urlTeamImage = team.crestUrl
+          urlTeamImage = urlTeamImage.replace(/^http:\/\//i, 'https://')
+          teamsHTML  += `
+          <div class="col s12 m6">
+            <div class="card">
+              <button onclick="dbInsertFavoriteTeam(${team.id},'${urlTeamImage}','${team.name}','${team.venue}','${team.website}')" class="website-action white-text btn blue accent-3">Add Favorite</button>
+              <div class="card-image waves-effect waves-block waves-light">
+                <img src="${urlTeamImage}" height="150px" alt="${team.name}"/>
+              </div>
+              <div class="card-content">
+                <span class="card-title truncate">${team.name}</span>
+                <ul>
+                  <li class="collection-item">${team.venue}</li>
+                  <li class="collection-item"><a href="${team.website}" target="_blank">${team.website}</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>`
+      })
+      document.getElementById('teams').innerHTML = teamsHTML
+  })
+  .catch(err => console.log(err))
 }

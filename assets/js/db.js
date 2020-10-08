@@ -1,52 +1,68 @@
-const idbPromised = idb.open("football_database", 1, (upgradedDb) => {
-  if (!upgradedDb.objectStoreNames.contains("teamFavorite")) {
-    upgradedDb.createObjectStore("teamFavorite", { keyPath: "id" });
+const idbPromised = idb.open("footballers_db", 1, (upgradedDb) => {
+  if (!upgradedDb.objectStoreNames.contains("teams")) {
+    upgradedDb.createObjectStore("teams");
   }
 });
 
 const dbGetAllFavoriteTeam = () => {
-  return new Promise((resolve, reject) => {
-    idbPromised.then(db => {
-      const transaction = db.transaction("teamFavorite", `readonly`);
-      return transaction.objectStore("teamFavorite").getAll();
-    }).then(data => {
-      if (data !== undefined) {
-        resolve(data)
-      } else {
-        reject(new Error("Favorite not Found"))
-      }
-    })
-  })
+  return idbPromised.then(db => {
+    let transaction = db.transaction("teams", `readonly`);
+    return transaction.objectStore("teams").getAll();
+  }).then(data => data)
+  .catch(() => console.log("Data Empty"))
 };
 
-const dbInsertFavoriteTeam = dataTeam => {
-  return new Promise((resolve, reject) => {
+const dbInsertFavoriteTeam = (id, logo, name, venue, website) => {
+  let confirm = window.confirm(`Apakah yakin ingin menambahkan ${name} ke Favorit ?`)
+  let item = {
+    id: id,
+    logo: logo,
+    name: name,
+    venue: venue,
+    website: website,
+    created: new Date().getTime()
+  };
+
+  if(confirm){
     idbPromised.then(db => {
-      const transaction = db.transaction("teamFavorite", `readwrite`);
-      transaction.objectStore("teamFavorite").put(dataTeam);
+      let transaction = db.transaction('teams', 'readwrite');
+      transaction.objectStore('teams').put(item, id);
       return transaction;
     }).then(transaction => {
       if (transaction.complete) {
-        resolve(true)
-      } else {
-        reject(new Error(transaction.onerror))
+        alert(`Team favorite ${name} berhasil di tambahkan.`)
+        pushNotification('Add Favorite Team', `Team favorite ${name} berhasil di tambahkan.`)
       }
-    })
-  })
+    }).catch(() => console.log("Gagal Menyimpan Team."))
+  }
 };
 
-const dbDeleteFavoriteTeam = id => {
-  return new Promise((resolve, reject) => {
+const dbDeleteFavoriteTeam = (id, name) => {
+  let confirm = window.confirm(`Apakah yakin ingin menghapus ${name} dari Favorit ?`)
+
+  if(confirm){
     idbPromised.then(db => {
-      const transaction = db.transaction("teamFavorite", `readwrite`);
-      transaction.objectStore("teamFavorite").delete(id);
+      let transaction = db.transaction('teams', 'readwrite');
+      transaction.objectStore('teams').delete(id);
       return transaction;
     }).then(transaction => {
       if (transaction.complete) {
-        resolve(true)
-      } else {
-        reject(new Error(transaction.onerror))
+        alert(`Team favorite ${name} berhasil di hapus.`)
+        pushNotification('Delete Favorite Team', `Team favorite ${name} berhasil di hapus.`)
       }
-    })
-  })
+    }).catch(() => console.log("Gagal Menyimpan Team."))
+  }
 };
+
+const pushNotification = (title, message) => {
+  const options = {
+      body: message
+  };
+  if (Notification.permission === 'granted') {
+      navigator.serviceWorker.ready.then(regis => {
+          regis.showNotification(title, options);
+      });
+  } else {
+      console.error('Fitur notifikasi tidak diijinkan.');
+  }
+}

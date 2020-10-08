@@ -48,8 +48,12 @@ document.addEventListener("DOMContentLoaded", function () {
             getStandingsCompetitions("2014");
           } else if (page == "match") {
             getMatchesCompetitions("2014", 1);
+          } else if(page == "teams") {
+            getTeams("2014");
+            window.dbInsertFavoriteTeam = dbInsertFavoriteTeam;
           } else if(page == "favorite") {
-            getFavoriteTeam()
+            getFavoriteTeam();
+            window.dbDeleteFavoriteTeam = dbDeleteFavoriteTeam;
           }
         } else if (this.status == 404) {
           content.innerHTML = "<p>Halaman tidak ditemukan.</p>";

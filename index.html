@@ -29,6 +29,32 @@
         </div>
     </nav>
 
+    <div class="slideshow-container">
+        <div class="slide fade">
+          <div class="numbertext">1 / 3</div>
+          <img src="./assets/img/madrid.jpg" height="300px" style="width:100%" alt="1">
+          <div class="text"><h5>Real Madrid Get First Goal</h5></div>
+        </div>
+
+        <div class="slide fade">
+          <div class="numbertext">2 / 3</div>
+          <img src="./assets/img/barcelona.jpg" height="300px" style="width:100%" alt="2">
+          <div class="text"><h5>Suarez Excited to Get Goal 3 Times</h5></div>
+        </div>
+
+        <div class="slide fade">
+          <div class="numbertext">3 / 3</div>
+          <img src="./assets/img/atletico.jpg" height="300px" style="width:100%" alt="3">
+          <div class="text"><h5>Atletic Preparing to next session</h5></div>
+        </div>
+
+        <div class="dot-container">
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+        </div>
+    </div>
+
     <!-- content -->
     <div class="container">
         <div class="section">
@@ -72,6 +98,27 @@
     <script type="text/javascript" src="assets/js/lib/idb.js"></script>
     <script type="text/javascript" src="assets/js/db.js"></script>
     <script type="text/javascript" src="./register-sw.js"></script>
+    <script>
+        var slideIndex = 0;
+        showSlides();
+
+        function showSlides() {
+            let i;
+            const slides = document.getElementsByClassName("slide");
+            const dots = document.getElementsByClassName("dot");
+            for (i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";
+            }
+            slideIndex++;
+            if (slideIndex > slides.length) {slideIndex = 1}
+                for (i = 0; i < dots.length; i++) {
+                    dots[i].className = dots[i].className.replace(" active", "");
+                }
+                slides[slideIndex-1].style.display = "block";
+                dots[slideIndex-1].className += " active";
+                setTimeout(showSlides, 2000);
+        }
+    </script>
 </body>
 
 </html>
